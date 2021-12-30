@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+        第一种实例化bean的方式：无参构造方式【掌握即可】
+    -->
+    <bean id="userService" class="com.donglan.service.impl.UserServiceImpl"></bean>
+
+    <!--
+        第二种实例化bean的方式：静态工厂实例化Bean
+        factory-method就是要调用的哪个静态工厂中的方法名称
+    -->
+    <bean id="dataSource" class="com.donglan.utils.DruidUtil" factory-method="getDataSource"></bean>
+
+    <!--
+        第三种实例化bean的方式：实例工厂实例化Bean
+            第一步：配置实例工厂对象
+            第二步：配置bean对象
+            factory-bean:  表示要调用哪个实例工厂对象的方法
+            factory-method: 表示要调用实例工厂对象的哪个方法
+    -->
+    <bean id="druidUtil" class="com.donglan.utils.DruidUtil2"></bean>
+    <bean id="dataSource2" factory-bean="druidUtil" factory-method="getDataSource"></bean>
+</beans>
