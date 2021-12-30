@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+        依赖注入：
+            1. 构造函数的方式，进行依赖注入
+                name的意思就是构造函数的参数名
+            2. 采用set方法的方式进行注入，使用property标签
+                name属性表示的是要赋值的方法名
+                ref属性表示的是要注入的对象的id
+    -->
+    <bean id="userService" class="com.donglan.service.impl.UserServiceImpl">
+        <!-- 使用set方法注入 让里面的userDao属性进行赋值 -->
+        <property name="userDao" ref="userDao"></property>
+        <property name="username" value="冬澜有雪"></property>
+        <property name="age" value="18"></property>
+        <property name="list">
+            <list>
+                <value>张三</value>
+                <value>李四</value>
+                <value>王五</value>
+            </list>
+        </property>
+        <property name="userList">
+            <list>
+                <bean class="com.donglan.pojo.User"></bean>
+                <bean class="com.donglan.pojo.User"></bean>
+                <ref bean="user1"></ref>
+                <ref bean="user2"></ref>
+            </list>
+        </property>
+        <property name="userMap">
+            <map>
+                <entry key="user1" value-ref="user1"></entry>
+                <entry key="user2" value-ref="user2"></entry>
+            </map>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="p1">ppp111</prop>
+                <prop key="p2">ppp222</prop>
+                <prop key="p3">ppp333</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="user1" class="com.donglan.pojo.User">
+        <property name="username" value="冬澜哈哈哈"></property>
+        <property name="password" value="冬澜哈哈哈"></property>
+    </bean>
+    <bean id="user2" class="com.donglan.pojo.User" p:username="张冬晖" p:password="123456"></bean>
+
+
+    <bean id="userDao" class="com.donglan.dao.impl.UserDaoImpl"></bean>
+
+
+
+
+</beans>
