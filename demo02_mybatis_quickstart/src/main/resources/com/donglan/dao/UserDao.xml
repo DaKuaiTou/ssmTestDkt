@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    1. 映射配置文件的存储路径需要在resources里面。而且还要和对应的Dao接口路径保持一致
+    2. 映射配置文件的文件名称必须和Dao接口的名称保持一致
+    3. 必须要引入头部约束文件
+
+    要求：根标签mapper，一个映射配置文件，对应一个dao接口
+         根标签的namespaceming命名空间，该属性的值对应的是dao接口的全限定名【动态代理】
+-->
+
+<mapper namespace="com.donglan.dao.UserDao">
+    <!--
+        根标签的每一个子标签就对应着dao接口的每一个方法
+        select标签对应这查询的方法
+            可以通过id的值对应方法的名称【动态代理】
+            resultType的值就对应这dao层接口的方法的返回值类型，resultType的值 = dao层接口返回类型的封装结果
+                如果封装结果的类型是List的话，那么就对应其泛型的类型
+    -->
+    <select id="findAllUser" resultType="com.donglan.pojo.User" >
+        select *from t_user
+    </select>
+
+</mapper>

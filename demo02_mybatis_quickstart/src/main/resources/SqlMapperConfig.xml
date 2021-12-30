@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--
+    根标签：configuration
+
+-->
+
+<configuration>
+    <!--
+        配置数据库的环境信息 environments
+            environments 表示里面可以配置多个环境，default表示默认使用哪个环境
+                environment：每一个该标签都表示一种环境
+        为什么要配置多个环境
+            因为我们开发中会有很多个环境（开发环境，测试环境，生产环境【项目上线之后运行的环境】）
+    -->
+    <environments default="dev">
+        <!-- 开发环境 -->
+        <environment id="dev">
+            <!-- transactionManager：事务管理器 type就是给JDBC的事务管理者 -->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--
+                dataSource表示的是数据源
+                type表示使用哪种数据源
+                    1. POOLED，mybatis自带的连接池
+                    2. UNPOOLED，表示不使用连接池
+                    3. JNDI，表示使用JNDI的连接池
+             -->
+            <dataSource type="POOLED">
+                <!-- 配置连接池的信息 -->
+                <property name="username" value="root"/>
+                <property name="password" value="rootroot"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis?characterEncoding=utf8"/>
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+            </dataSource>
+        </environment>
+
+        <environment id="test">
+            <transactionManager type=""></transactionManager>
+            <dataSource type=""></dataSource>
+        </environment>
+
+        <environment id="pro">
+            <transactionManager type=""></transactionManager>
+            <dataSource type=""></dataSource>
+        </environment>
+
+    </environments>
+
+
+    <!--
+        指定加载哪些映射配置文件
+            mappers标签，表示的每一个mapper标签负责加载一个映射配置文件
+                resource 指定要加载的映射配置文件的路径
+    -->
+
+    <mappers>
+        <mapper resource="com\donglan\dao\UserDao.xml"></mapper>
+    </mappers>
+
+</configuration>
