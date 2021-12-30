@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans>
+    <bean id="userService" class="com.donglan.service.impl.UserServiceImpl"></bean>
+    <bean id="userService02" class="com.donglan.service.impl.UserServiceImpl02"></bean>
+</beans>
