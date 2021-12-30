@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.donglan.mapper.UserMapper">
+
+    <select id="findUserTotal" resultType="long">
+        select count(*) from t_user
+    </select>
+
+    <select id="findById" resultType="User" parameterType="int">
+        select *from t_user where id = #{id}
+    </select>
+
+    <select id="findByUsername" resultType="map" parameterType="string">
+        select *from t_user where username = #{username}
+    </select>
+
+    <select id="findAllUsers1" resultType="User">
+        select *from t_user
+    </select>
+
+    <select id="findAllUsers2" resultType="map">
+        select *from t_user
+    </select>
+
+
+    <!--
+        resultType，会进行自动映射：根据结果的字段名和pojo属性名的对应关系进行映射
+        resultMap，需要手动映射：我们要使用resultMap标签编写一个手动映射的规则，然后在使用这个规则
+
+        id，表示这个手动映射规则的唯一标识
+        type，表示要进行手动映射的类型是谁：UserInfo
+        autoMapping，表示的能自动映射的就自动映射，不能自动映射的，我们来手动映射
+    -->
+    <resultMap id="userInfoMap" type="UserInfo" autoMapping="true">
+        <!--
+            id标签，表示对主键进行手动映射
+                property，表示要进行映射的主键的属性名
+                column，表示要进行映射的主键的字段名/列明
+        -->
+        <id property="idInfo" column="id"></id>
+        <!--
+            result标签，就是对其他的非主键进行手动映射
+        -->
+        <result property="sexInfo" column="sex"></result>
+        <result property="birthdayInfo" column="birthday"></result>
+        <result property="addressInfo" column="address"></result>
+    </resultMap>
+
+    <select id="findAllUserInfo" resultMap="userInfoMap">
+        select *from t_user
+    </select>
+</mapper>
