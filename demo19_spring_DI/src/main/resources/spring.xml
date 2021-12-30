@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+        依赖注入：
+            1. 构造函数的方式，进行依赖注入
+                name的意思就是构造函数的参数名
+    -->
+    <bean id="userService" class="com.donglan.service.impl.UserServiceImpl">
+        <constructor-arg name="userDao" ref="userDao"/>
+    </bean>
+    <bean id="userDao" class="com.donglan.dao.impl.UserDaoImpl"></bean>
+</beans>
