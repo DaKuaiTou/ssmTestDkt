@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.donglan.mapper.UserMapper">
+
+    <resultMap id="userRoleListMap" type="User">
+        <id property="uid" column="uid"></id>
+        <result property="username" column="username"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <result property="address" column="address"></result>
+        <collection property="roleList" ofType="Role" autoMapping="true">
+
+        </collection>
+    </resultMap>
+    <select id="findUserRoleListByUid" parameterType="int" resultMap="userRoleListMap">
+        select *from t_user u left join user_role ur
+        on u.uid = ur.uid left join t_role r
+        on ur.rid = r.rid
+        where u.uid = #{uid};
+
+    </select>
+</mapper>

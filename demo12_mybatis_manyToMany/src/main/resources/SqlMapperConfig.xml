@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- 加载了数据库的连接配置-->
+    <properties resource="jdbc.properties"></properties>
+
+    <!-- 开启二级缓存 -->
+    <settings>
+        <!-- value的值如果为false，表示不开启二级缓存 -->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
+    <!-- 为实体类配置别名 -->
+    <typeAliases>
+        <!-- 给User实体类的全限定名，起了别名User-->
+        <!--<typeAlias type="com.donglan.pojo.User" alias="User"></typeAlias>-->
+        <!-- 凡是在这个路径下的类都已经起好了别名，别名就是类名或者类名的小写-->
+        <package name="com.donglan.pojo"/>
+
+
+    </typeAliases>
+
+    <environments default="dev">
+        <environment id="dev">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+
+    <mappers>
+       <!-- <mapper resource="com\donglan\mapper\UserMapper.xml"></mapper>-->
+        <!--<mapper class="com.donglan.mapper.UserMapper"></mapper>-->
+        <package name="com.donglan.mapper"/>
+    </mappers>
+
+</configuration>
