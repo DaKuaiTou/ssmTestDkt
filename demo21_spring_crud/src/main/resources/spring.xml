@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--
+        IOC：我们要创建哪些对象，来交给Spring容器管理
+            UserServiceImpl对象
+            UserDaoImol对象
+            QueryRunner对象
+            DataSource对象
+    -->
+    <!--
+        DI：将哪些对象注入哪个属性
+            将UserDaoImpl的对象注入到UserServiceImpl中去
+            将queryRunner对象注入到UserDaoImpl中去
+            将dataSource对象注入到queryRunner中去
+    -->
+
+    <!-- UserService的ioc管理 -->
+    <bean id="userService" class="com.donglan.service.impl.UserServiceImpl">
+        <property name="userDao" ref="userDao"></property>
+    </bean>
+    <!--  UserDao的ioc管理-->
+    <bean id="userDao" class="com.donglan.dao.impl.UserDaoImpl">
+        <property name="queryRunner" ref="queryRunner"></property>
+    </bean>
+    <!--  queryRunner的ioc管理-->
+    <bean id="queryRunner" class="org.apache.commons.dbutils.QueryRunner">
+        <constructor-arg name="ds" ref="dataSource"></constructor-arg>
+    </bean>
+    <!--  dataSource的ioc管理-->
+    <bean id="dataSource" class="com.donglan.utils.DruidUtil" factory-method="getDataSource"></bean>
+
+</beans>
