@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.donglan.mapper.UserMapper">
+
+    <select id="findUserByUid" parameterType="int" resultType="User">
+         select *from t_user where uid = #{uid}
+    </select>
+
+
+    <resultMap id="userAccountMap" type="User" autoMapping="true">
+
+        <!--
+            一对多的懒加载模式
+
+        -->
+        <id property="uid" column="uid"></id>
+        <collection property="accountList" autoMapping="true" ofType="Account" select="com.donglan.mapper.AccountMapper.findAccountByuid" column="uid"></collection>
+    </resultMap>
+    <select id="findUserByUid2" parameterType="int" resultMap="userAccountMap">
+         select *from t_user where uid = #{uid}
+    </select>
+</mapper>
