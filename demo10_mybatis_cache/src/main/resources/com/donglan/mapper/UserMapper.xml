@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.donglan.mapper.UserMapper">
+
+    <!-- 表示在当前的mapper映射文件中将使用二级缓存 -->
+    <cache/>
+
+    <select id="findAllUsers" resultType="User">
+        select * from t_user
+    </select>
+
+    <insert id="insertUser" parameterType="User">
+        insert into t_user(username,sex,birthday,address)
+        values(#{username},#{sex},#{birthday},#{address})
+    </insert>
+</mapper>
