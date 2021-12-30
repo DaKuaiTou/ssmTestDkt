@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 配置spring创建容器时要扫描的组件-->
+    <context:component-scan base-package="com.donglan"></context:component-scan>
+
+    <!-- 加载mvc的注解驱动 -->
+    <!--在该标签中引用配置的类型转换服务-->
+    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+
+    <!-- 配置springmvc视图解析器-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--配置前缀-->
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <!--配置后缀-->
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--配置类型转换器-->
+    <!--将自定义的转换器注册到类型转换器的服务中-->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <!--注入一个新的类型转换器-->
+        <property name="converters">
+            <array>
+                <!--配置自定义类型转换器-->
+                <bean class="com.donglan.convert.DateConverter"></bean>
+            </array>
+        </property>
+    </bean>
+
+</beans>
