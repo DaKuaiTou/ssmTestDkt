@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加用户</title>
+    <script src="js/axios-0.18.0.js"></script>
+    <script src="js/vuejs-2.5.16.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <form onsubmit="return false">
+            用户名称：<input type="text" name="username" v-model="user.username"><br/>
+            密码：<input type="text" name="password" v-model="user.password"><br/>
+            昵称：<input type="text" name="nickname" v-model="user.nickname"><br/>
+            <input type="submit" value="添加" @click="addUser()">
+        </form>
+    </div>
+    <script>
+        var vue = new Vue({
+            el:"#app",
+            data:{
+                user:{}
+            },
+            methods:{
+                addUser(){
+                    // 使用变量完成数据的入参
+                    let params = this.user;
+                    // 发起异步请求
+                    axios.post("/user/addUser",params).then(response=>{
+                        // 判断保存是否成功
+                        if(response.data.flag){
+                            // 表示添加成功，跳转到查询所有用户的页面
+                            location.href="userList.html";
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
