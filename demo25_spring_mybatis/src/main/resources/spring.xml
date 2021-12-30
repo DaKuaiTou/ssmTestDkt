@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 混合开发 -->
+    <!-- 包扫描 -->
+    <context:component-scan base-package="com.donglan"></context:component-scan>
+
+    <!--
+        整合mybatis
+            1. 配置DataSource
+            2. 配置SqlSessionFactoryBean
+                注入数据源
+                注入别名包扫描
+           3. 配置MapperScannerConfigurer，进行dao接口的包扫描
+                注入 basePackage，注入要扫描的dao层接口所在的包
+    -->
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="username" value="root"></property>
+        <property name="password" value="rootroot"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/mybatis?characterEncoding=utf-8"></property>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="typeAliasesPackage" value="com.donglan.pojo"></property>
+    </bean>
+
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.donglan.mapper"></property>
+    </bean>
+
+
+</beans>
