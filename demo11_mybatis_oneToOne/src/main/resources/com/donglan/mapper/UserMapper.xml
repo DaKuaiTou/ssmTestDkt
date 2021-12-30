@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.donglan.mapper.UserMapper">
+
+    <!-- 【注意事项】在执行多表联合查询，不管字段和属性是否一致，都需要自定义映射，手动来注入 -->
+    <resultMap id="userAccountListMap" type="User">
+        <id property="uid" column="uid"></id>
+        <result property="username" column="username"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <result property="address" column="address"></result>
+        <!-- 一对多的手动映射 -->
+        <!--
+            collection标签，进行的手动映射，关系是一对多
+                property属性：要进行一对多映射的属性名
+                ofType属性：要进行一对多的属性类型
+        -->
+        <collection property="accountList" ofType="Account" autoMapping="true"></collection>
+    </resultMap>
+    <select id="findUserAccountListByUid" parameterType="int" resultMap="userAccountListMap">
+        select *from t_user u left join t_account a on u.uid = a.uid where u.uid = #{uid};
+    </select>
+</mapper>

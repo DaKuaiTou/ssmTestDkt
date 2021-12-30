@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.donglan.mapper.AccountMapper">
+
+    <resultMap id="accountUserMap" type="Account" autoMapping="true">
+        <!--
+            account对象的属性进行自动映射
+            user属性必须使用手动映射的方式进行操作
+
+            使用 association标签 来进行一对一的映射
+                property属性：要进行一对一映射的属性名
+                javaType属性：要进行一对一映射的属性类型
+        -->
+        <association property="user" javaType="User" autoMapping="true"></association>
+    </resultMap>
+    <select id="findAccountUserByAid" parameterType="int" resultMap="accountUserMap">
+        select *from t_account a,t_user u where a.uid = u.uid and a.aid = #{aid};
+    </select>
+</mapper>
