@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.donglan.mapper.UserMapper">
+
+    <sql id="select_all">
+         select *from t_user
+    </sql>
+
+    <select id="findUserListByAddress" parameterType="string" resultType="User">
+        <include refid="select_all"/>
+        <!--
+            添加一个判断，判断传入的参数address是否为空
+            使用if判断，如果为空，就不拼接，不为空，则拼接
+            使用test属性进行判断
+        -->
+        <if test="address != null and address != ''">
+            where address=#{address}
+        </if>
+    </select>
+
+    <select id="findUserListByAddressAndSex" parameterType="User" resultType="User">
+        <include refid="select_all"/>
+         where 1=1
+        <if test="sex != null and sex != ''">
+            and sex = #{sex}
+        </if>
+        <if test="address != null and address != ''">
+            and address = #{address}
+        </if>
+    </select>
+
+    <select id="findUserListByAddressAndSex2" parameterType="User" resultType="User">
+        <include refid="select_all"/>
+        <where>
+            <if test="sex != null and sex != ''">
+                and sex = #{sex}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+        </where>
+
+    </select>
+
+    <update id="updateUser" parameterType="User">
+        update t_user
+         <set>
+             <if test="username != null and username !=''">
+                 username = #{username},
+             </if>
+             <if test="sex != null and sex !=''">
+                 sex = #{sex},
+             </if>
+             <if test="birthday != null">
+                 birthday = #{birthday},
+             </if>
+             <if test="address != null and address !=''">
+                 address = #{address},
+             </if>
+         </set>
+         where id=#{id}
+    </update>
+
+    <select id="findUserById" parameterType="int" resultType="User">
+        <include refid="select_all"/>
+         where id = #{id}
+    </select>
+
+    <delete id="deleteByIds" parameterType="int">
+        delete from t_user where id
+        <foreach collection="list" index="i" item="id" separator="," open="in(" close=")" >
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="findUserListByAddressAndSex3" parameterType="User" resultType="User">
+        <include refid="select_all"/>
+        <trim prefix="where" prefixOverrides="and">
+            <if test="sex != null and sex != ''">
+                and sex = #{sex}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+        </trim>
+
+
+    </select>
+
+
+</mapper>
