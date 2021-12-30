@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+        每一个实现类就对应这一个bean标签
+            id属性：表示该bean对象的唯一标识，根据唯一标识，就可以从核心容器中获取对象
+            class属性：对象所属的实现类的全限定名
+    -->
+
+    <bean id="userService" class="com.donglan.service.impl.UserServiceImpl"></bean>
+    <bean id="userService02" class="com.donglan.service.impl.UserServiceImpl02" lazy-init="true" init-method="initData" destroy-method="saveData"></bean>
+
+    <!--
+
+        bean标签中的属性
+            id
+            class
+            scope属性：对象的范围
+                1. singleton 单例【默认】
+                2. prototype 多例
+            lazy-init属性：懒加载的配置，核心容器创建的时候是否创建出该类对象
+            init-method属性：配置类的对象初始化的时候，要调用的方法
+            destroy-method属性：配置这个类的对象销毁的时候，要调用的方法
+    -->
+
+</beans>
