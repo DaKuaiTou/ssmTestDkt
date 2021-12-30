@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--组件扫描-->
+    <context:component-scan base-package="com.donglan"></context:component-scan>
+
+    <!--引入spring的mybatis相关bean-->
+    <import resource="classpath:mybatis-config.xml"></import>
+
+
+    <!--
+        Spring的声明式事务
+            1. 配置事务管理者
+            2.进行事务配置
+                2.1 声明事务规则
+    -->
+
+
+    <!--对事务相关的对象进行IOC-->
+    <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+     </bean>
+    <!--事务的规则配置-->
+    <tx:advice id="tx1" transaction-manager="dataSourceTransactionManager">
+        <tx:attributes>
+            <!--给哪个方法添加事务规则  rollback-for的意思表示遇到所有的Exception都要回滚-->
+            <tx:method name="transfer" rollback-for="java.lang.Exception" />
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <!-- 配置切入点-->
+        <aop:pointcut id="pointcut1" expression="execution(public void com.donglan.service.impl.AccountServiceImpl.transfer(..))"/>
+        <!--配置事务通知-->
+        <aop:advisor advice-ref="tx1" pointcut-ref="pointcut1"></aop:advisor>
+    </aop:config>
+
+</beans>
