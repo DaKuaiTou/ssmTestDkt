@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.donglan.mapper.UserMapper">
+
+    <!--  查询所有用户数据 -->
+    <select id="findAllUsers" resultType="User">
+        select * from t_user
+    </select>
+
+    <!-- 添加用户-->
+    <insert id="addUser" parameterType="User">
+        <selectKey keyProperty="id" keyColumn="id" order="AFTER" resultType="int">
+            select last_insert_id()
+        </selectKey>
+        insert into t_user (username,sex,birthday,address) values (#{username},#{sex},#{birthday},#{address})
+    </insert>
+    <!--
+        在sql语句当中，我们使用的是 #{} 字符，#{} 表示占位符的意思，我们可以理解为jdbc的预编译sql语句对象中的？占位符
+        那么，具体的值是由User来里面的成员属性来决定
+        parameterType ，需要携带的参数，代表的是参数的类型，因为我们传递的形参是一个类的对象，所以类型就写类的全限定名
+            使用了包扫描，对所有的实体类路径下的类都起了别名
+    -->
+    <!--
+        获取新增用户返回的id之方式一
+       useGeneratedKeys="true" keyProperty="id" keyColumn="id"
+        useGeneratedKeys="true" 表示的使用 enerated 生成 keys 主键。【使用数据库产生的主键】
+        keyProperty="id" 表示的是实体类的属性id
+        keyColumn="id" 表示的是数据库表的字段id
+
+        当前的操作只执行了一条sql语句，查询到id并返回
+        【问题】：这种方式不支持oracle，只支持mysql  执行一条sql语句
+
+
+        获取新增用户返回的id之方式二
+        在<insert>标签中使用<selectKey>标签，主要的就是做查询主键的
+            selectKey有哪些属性
+                keyColumn 表示的是要查询的列名
+                keyProperty 表示的是复制给实体类的属性名
+                order="AFTER" 表示的是在前还是在后，这个肯定是后面执行id的查询并赋值
+                resultType="int" 表示查询出来的结果的类型
+         【第二种方式，支持其他的数据库，但是会执行两次sql语句】
+         【第二种方式，必须和insert标签在同一个事务中，肯定不能单独存在的】
+    -->
+    <!--
+        【总结】
+            第一种方式：执行效率很快，只有一次添加，但是不支持oracle
+            第二种方式：会有两次查询，且支持不同的数据库，一般情况下，开发中很少使用获取新增数据的id，除非是有关联业务的情况下
+        【注意】
+            第一点：新添加的主键id并不是在执行添加操作的时候直接返回的，而是在执行添加操作之后将新添加的记录的主键id字段设置为实体类对象的主键id属性
+            第二点：insert返回的是受影响的行数。如果我们要获取新增用户的id，我们需要使用get方法才能得到我们需要的id值
+    -->
+
+    <select id="findUserById" parameterType="int" resultType="User">
+        select *from t_user where id = #{id}
+    </select>
+
+    <update id="updateUser" parameterType="User">
+        update t_user set username=#{username},sex=#{sex},birthday=#{birthday},address=#{address} where id = #{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="int">
+        delete from t_user where id = #{id}
+    </delete>
+
+    <!--
+        模糊查询方式一：使用字符串拼接的方式，在给参数的时候就拼接好的
+    -->
+    <select id="searchUserByUsername1" parameterType="string" resultType="User">
+        select * from t_user where username like #{username}
+    </select>
+
+    <!--
+        模糊查询方式二：在sql语句中拼接字符串，
+                    1. like "%"变量"%"，但是不能使用单引号[查询不出来结果]，因为只识别双引号
+                                        字符串拼接的方式不支持多种数据库的使用
+                                        【pass】select * from t_user where username like "%"#{username}"%"
+                    2. like concat("%",#{username},"%")，数据库提供的字符串拼接函数
+                        mysql数据库中支持concat("a","b","c",...)拼接很多的字符串
+                        oracle数据库中只能支持拼接两个字符串 concat("a","b")
+    -->
+    <select id="searchUserByUsername2" parameterType="string" resultType="User">
+        select * from t_user where username like concat("%",#{username},"%")
+    </select>
+
+    <!--
+        模糊查询方式三：我们可以在sql语句中引用参数的方式：${}
+            1. 引用实体类中的属性：'${username/属性名}'
+            2. 引用简单类型的参数：‘${value}’，在高版本的mybatis中，可以使用  ‘${任意字符串}’
+
+            我们在原来#{}占位符，改成了使用${}的方式，
+            如果是使用模糊查询的话，那么 ${value}就是固定不变的，不能写成其他的名字
+    -->
+    <select id="searchUserByUsername3" parameterType="string" resultType="User">
+        select * from t_user where username like '%${value}%'
+    </select>
+
+    <select id="findUserByUsername" parameterType="string" resultType="User">
+        select *from t_user where username = ${value}
+    </select>
+
+    <update id="updateUserByMap" parameterType="map">
+        update t_user set username=#{username} where id = #{id}
+    </update>
+
+    <select id="searchuserByUsernameAndAddress1" resultType="User">
+        select *from t_user where username = #{param1} and address = #{param2}
+    </select>
+
+    <select id="searchuserByUsernameAndAddress2" resultType="User">
+        select *from t_user where username = #{username} and address = #{address}
+    </select>
+
+    <select id="searchByCondition" parameterType="QueryUser" resultType="User">
+        select * from t_user where sex = #{queryCondition.sex} and address = #{queryCondition.address} limit #{offset},#{pageSize}
+    </select>
+</mapper>
