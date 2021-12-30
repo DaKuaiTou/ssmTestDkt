@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="com.donglan"></context:component-scan>
+
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <mvc:default-servlet-handler></mvc:default-servlet-handler>
+
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <!--里面可以配置多个拦截器，每一个interceptor标签都代表这一个拦截器-->
+        <mvc:interceptor>
+            <!--mapping表示的就是该拦截器的拦截范围-->
+            <mvc:mapping path="/**"/>
+            <!-- exclude-mapping 表示的是排除了哪些请求范围-->
+            <mvc:exclude-mapping path="/user/sayHello1"/>
+            <!-- bean就是用来表示我们要进行配置的拦截器  纳入到IOC容器中-->
+            <bean id="permissionInterceptor" class="com.donglan.interceptor.PermissionInterceptor"></bean>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <!--mapping表示的就是该拦截器的拦截范围-->
+            <mvc:mapping path="/**"/>
+            <!-- exclude-mapping 表示的是排除了哪些请求范围-->
+            <mvc:exclude-mapping path="/user/sayHello1"/>
+            <!-- bean就是用来表示我们要进行配置的拦截器  纳入到IOC容器中-->
+            <bean id="secondInterceptor" class="com.donglan.interceptor.SecondInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>
