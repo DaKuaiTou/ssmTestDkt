@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 配置目标类 -->
+    <bean id="target" class="com.donglan.Target"></bean>
+    <!-- 配置切面类 -->
+    <bean id="myAspect" class="com.donglan.MyAspect"></bean>
+
+    <aop:config>
+        <!-- 引用myAspect的Bean为切面对象 -->
+        <aop:aspect ref="myAspect">
+            <!-- 配置Target目标类的method方法，执行的时候要进行myAspect类中的beforeMethod方法的前置增强 -->
+            <aop:before method="beforeMethod" pointcut="execution(public void com.donglan.Target.method())"></aop:before>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
